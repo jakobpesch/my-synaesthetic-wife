@@ -9,15 +9,13 @@
 
 <T.PerspectiveCamera makeDefault position={[0, 3, 0]} fov={15}>
 	<OrbitControls
-		autoRotate={false}
-		enableZoom={false}
+		enableZoom={true}
 		enablePan={false}
-		invertPan={true}
 		enableDamping={true}
+		maxPolarAngle={Math.PI / 7.8}
+		minPolarAngle={Math.PI / 8.2}
 		target={[0, 3, 0]}
 		rotateSpeed={-0.2}
-		maxPolarAngle={Math.PI / 8}
-		minPolarAngle={Math.PI / 8}
 	/>
 </T.PerspectiveCamera>
 

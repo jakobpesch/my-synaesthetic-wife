@@ -7,7 +7,24 @@ Command: npx @threlte/gltf@2.0.3 ./static/calendar-ring.gltf
 	import { Group, MeshBasicMaterial, Color, DoubleSide } from 'three';
 	import { T, forwardEventHandlers } from '@threlte/core';
 	import { useGltf } from '@threlte/extras';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
+	import { interactivity } from '@threlte/extras';
+	import { spring } from 'svelte/motion';
+	interactivity();
+	const scale = spring({
+		Jan: 1,
+		Feb: 1,
+		Mar: 1,
+		Apr: 1,
+		May: 1,
+		Jun: 1,
+		Jul: 1,
+		Aug: 1,
+		Sep: 1,
+		Oct: 1,
+		Nov: 1,
+		Dec: 1
+	});
 
 	export const ref = new Group();
 
@@ -46,11 +63,18 @@ Command: npx @threlte/gltf@2.0.3 ./static/calendar-ring.gltf
 				acc[cur.slice(4, 7)] = [...(acc[cur.slice(4, 7)] || []), gltf.nodes[cur]];
 				return acc;
 			}, {})}
-		{#each Object.entries(monthNodes) as [month, monthNode], montIndex}
-			{#each monthNode as dayMesh, dayIndex}
+		{#each Object.entries(monthNodes) as [month, monthNode], montIndex (month)}
+			{#each monthNode as dayMesh, dayIndex (dayIndex)}
 				{@const sat = 100 - dayIndex * 2}
 				{@const hsl = `hsl(${MONTH_TO_HUE_COLOR[month]}, ${sat}%, 50%)`}
 				{@const color = new Color(hsl)}
+				<!-- scale={$scale[month]}
+					on:pointerenter={() => {
+						scale.update((x,y)=>{ ...$scale, [month]: 1.1 });
+					}}
+					on:pointerleave={() => {
+						scale.update((x,y)=>{ ...$scale, [month]: 1 });
+					}} -->
 				<T.Mesh
 					geometry={dayMesh.geometry}
 					material={new MeshBasicMaterial({
